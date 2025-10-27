@@ -3,29 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pokédex</title>
-    <link rel="stylesheet" href="css/style.css" />
+    <title>Pokémon Generation</title>
+    <link rel="stylesheet" href="poke.css" />
     <script src="script.js" defer></script>
     <script src="ui.js" defer></script>
     <script src="api.js" defer></script>
   </head>
   <body>
     <header>
-      <h1>Pokédex</h1>
-    </header>
-
-    <main>
-      <section>
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Enter Pokémon name or ID"
-        />
-        <button id="searchBtn">Search</button>
-      </section>
-
-      <section>
-        <label for="typeFilter">Filter by Type:</label>
+      <h1 id="generationTitle">Pokémon Generation</h1>
+      <nav>
+        <a href="poke.html">← Back to Search</a>
+      </nav>
+      <div>
+        <label>Filter by Type:</label>
         <select id="typeFilter">
           <option value="">All</option>
           <option value="normal">Normal</option>
@@ -47,25 +38,11 @@
           <option value="steel">Steel</option>
           <option value="fairy">Fairy</option>
         </select>
-      </section>
+      </div>
+    </header>
 
-      <section class="generation-nav">
-        <h2>Or select a Generation:</h2>
-        <div class="generation-links">
-          <a href="generation.html?gen=1">Gen 1</a>
-          <a href="generation.html?gen=2">Gen 2</a>
-          <a href="generation.html?gen=3">Gen 3</a>
-          <a href="generation.html?gen=4">Gen 4</a>
-          <a href="generation.html?gen=5">Gen 5</a>
-          <a href="generation.html?gen=6">Gen 6</a>
-          <a href="generation.html?gen=7">Gen 7</a>
-          <a href="generation.html?gen=8">Gen 8</a>
-          <a href="generation.html?gen=9">Gen 9</a>
-        </div>
-      </section>
-
-      <section id="pokemonList" class="pokemon-list"></section>
-      <button id="loadMoreBtn">Load more</button>
+    <main>
+      <div id="pokemonList" class="pokemon-list"></div>
     </main>
   </body>
 </html>
