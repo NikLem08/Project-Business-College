@@ -3,53 +3,101 @@ const modal = document.getElementById("pokemonModal");
 const modalContent = document.getElementById("pokemonDetails");
 const closeModal = document.getElementById("closeModal");
 
-// Элемент для поиска
+// Элемент для поиска и новые элементы для пагинации
 const searchInput = document.getElementById("searchInput");
-let allPokemons = []; // Массив для хранения всех загруженных покемонов
+const loadMoreBtn = document.getElementById("loadMoreBtn");
+const initialLoadingMessage = document.getElementById("initialLoadingMessage"); // НОВЫЙ ЭЛЕМЕНТ
 
-// --- 1. Логика загрузки и поиска ---
+let allPokemons = []; // Массив для хранения ВСЕХ загруженных покемонов
+const renderChunkSize = 50; // Сколько покемонов отрисовывать за раз
+let currentRenderLimit = renderChunkSize; // Текущий лимит отрисовки
 
-// Загружаем первых 151 покемона (Gen 1)
-async function fetchPokemons() {
-  // Загружаем список 151
-  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
-  const data = await res.json();
+// --- 1. Логика загрузки, пагинации и поиска ---
 
-  // Создаем промисы для детальной информации о каждом покемоне
-  const fetchPromises = data.results.map(async (pokemon) => {
+/**
+ * Загружает ДЕТАЛИ для ВСЕХ покемонов и сохраняет в allPokemons.
+ * Это позволяет мгновенно искать по всем данным.
+ */
+async function fetchAllPokemonDetails() {
+  initialLoadingMessage.style.display = "block";
+
+  // Шаг 1: Получаем список всех покемонов (используем большой лимит)
+  // Это быстрый запрос, который дает нам все имена и ссылки.
+  const listRes = await fetch(
+    "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0"
+  );
+  const listData = await listRes.json();
+
+  // Шаг 2: Создаем промисы для детальной информации о каждом покемоне
+  const fetchPromises = listData.results.map(async (pokemon) => {
     const pokeRes = await fetch(pokemon.url);
+    if (!pokeRes.ok) return null; // Игнорируем проблемные записи
     return pokeRes.json();
   });
 
-  // Ждем все детали и сохраняем
-  allPokemons = await Promise.all(fetchPromises);
+  // Шаг 3: Ждем все детали и сохраняем
+  allPokemons = (await Promise.all(fetchPromises)).filter((p) => p !== null);
 
-  // Применяем начальную сортировку
+  // Сортируем по ID
   allPokemons.sort((a, b) => a.id - b.id);
 
-  // Изначально отображаем всех
+  initialLoadingMessage.style.display = "none"; // Скрываем сообщение о загрузке
+
+  // Изначально отображаем первую порцию
   applySearchAndRender();
 }
 
-// Функция применения поиска и отрисовки
-function applySearchAndRender() {
-  let currentPokemons = [...allPokemons]; // Копируем массив
+// Обработчик события для кнопки "Load More"
+loadMoreBtn.addEventListener("click", () => {
+  loadMoreBtn.disabled = true; // Отключаем кнопку, чтобы избежать двойных кликов
 
-  // --- Поиск по имени/ID ---
+  // Увеличиваем лимит отрисовки
+  currentRenderLimit += renderChunkSize;
+
+  // Запускаем отрисовку с новым лимитом
+  applySearchAndRender();
+
+  loadMoreBtn.disabled = false; // Включаем кнопку после отрисовки
+});
+
+// Функция применения поиска и отрисовки (теперь управляет и пагинацией)
+function applySearchAndRender() {
+  let currentPokemons = [...allPokemons]; // Копируем ВЕСЬ массив для поиска
+
   const searchTerm = searchInput.value.toLowerCase().trim();
+
+  // --- 1. Логика поиска ---
   if (searchTerm) {
     currentPokemons = currentPokemons.filter((pokemon) => {
-      // Поиск по имени (включая) ИЛИ по ID (начинается с)
+      // Поиск всегда работает по всему массиву 'allPokemons'
       const nameMatch = pokemon.name.toLowerCase().includes(searchTerm);
       const idMatch = String(pokemon.id).startsWith(searchTerm);
       return nameMatch || idMatch;
     });
-  }
 
-  renderPokemonList(currentPokemons);
+    // При активном поиске показываем ВСЕ найденные результаты
+    loadMoreBtn.style.display = "none";
+
+    // Отрисовываем отфильтрованный список целиком
+    renderPokemonList(currentPokemons);
+  } else {
+    // --- 2. Логика пагинации (если поиск пуст) ---
+
+    // Берем только ту часть, которая должна быть отрисована
+    const pokemonsToRender = currentPokemons.slice(0, currentRenderLimit);
+
+    renderPokemonList(pokemonsToRender);
+
+    // Показываем/скрываем кнопку Load More
+    if (currentRenderLimit < allPokemons.length) {
+      loadMoreBtn.style.display = "block";
+    } else {
+      loadMoreBtn.style.display = "none";
+    }
+  }
 }
 
-// Функция для отображения списка покемонов
+// Функция для отображения списка покемонов (без изменений)
 function renderPokemonList(pokemons) {
   pokemonList.innerHTML = ""; // Очищаем список перед отрисовкой
   if (pokemons.length === 0) {
@@ -84,10 +132,10 @@ function renderPokemon(pokemon) {
   pokemonList.appendChild(card);
 }
 
-// Обработчик события для поиска
+// Обработчик события для поиска (без изменений)
 searchInput.addEventListener("input", applySearchAndRender);
 
-// --- 2. Логика модального окна ---
+// --- 2. Логика модального окна (без изменений) ---
 
 async function showPokemonDetails(id) {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
@@ -171,4 +219,4 @@ window.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
 
-fetchPokemons();
+fetchAllPokemonDetails();
