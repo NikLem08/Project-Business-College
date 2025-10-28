@@ -7,35 +7,45 @@
     <link rel="stylesheet" href="styles.css" />
     <script src="generation.js" defer></script>
   </head>
+
   <body>
     <header>
-      <h1 id="genTitle"></h1>
-      <nav>
-        <!-- Navigointi eri sivuille ja sukupolviin -->
-        <a href="poke.html">All Pokémon</a>
-        <a href="generation.html?gen=1">Gen 1</a>
-        <a href="generation.html?gen=2">Gen 2</a>
-        <a href="generation.html?gen=3">Gen 3</a>
-        <a href="generation.html?gen=4">Gen 4</a>
-        <a href="generation.html?gen=5">Gen 5</a>
-        <a href="generation.html?gen=6">Gen 6</a>
-        <a href="generation.html?gen=7">Gen 7</a>
-        <a href="generation.html?gen=8">Gen 8</a>
-        <a href="generation.html?gen=9">Gen 9</a>
-      </nav>
-      <div class="filters">
-        <select id="typeFilter">
-          <option value="">All Types</option>
-        </select>
-        <select id="sortFilter">
-          <option value="id-asc">ID ↑</option>
-          <option value="id-desc">ID ↓</option>
-          <option value="name-asc">Name A–Z</option>
-          <option value="name-desc">Name Z–A</option>
-        </select>
+      <h1 id="genTitle">Pokémon Generation</h1>
+      <div class="search-and-filters">
+        <div class="filters">
+          <select id="typeFilter">
+            <option value="">All Types</option>
+          </select>
+          <select id="sortFilter">
+            <option value="id-asc">ID ↑</option>
+            <option value="id-desc">ID ↓</option>
+            <option value="name-asc">Name A–Z</option>
+            <option value="name-desc">Name Z–A</option>
+          </select>
+        </div>
       </div>
     </header>
 
+    <nav>
+      <a href="poke.html">All Pokémon</a>
+      <a href="generation.html?gen=1">Gen 1</a>
+      <a href="generation.html?gen=2">Gen 2</a>
+      <a href="generation.html?gen=3">Gen 3</a>
+      <a href="generation.html?gen=4">Gen 4</a>
+      <a href="generation.html?gen=5">Gen 5</a>
+      <a href="generation.html?gen=6">Gen 6</a>
+      <a href="generation.html?gen=7">Gen 7</a>
+      <a href="generation.html?gen=8">Gen 8</a>
+      <a href="generation.html?gen=9">Gen 9</a>
+    </nav>
+
     <main id="pokemonList" class="pokemon-list"></main>
+
+    <div id="pokemonModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal">&times;</span>
+        <div id="pokemonDetails"></div>
+      </div>
+    </div>
   </body>
 </html>

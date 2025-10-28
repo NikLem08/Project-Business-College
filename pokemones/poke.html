@@ -3,45 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pokédex</title>
+    <title>PokeDex</title>
     <link rel="stylesheet" href="styles.css" />
     <script src="script.js" defer></script>
   </head>
+
   <body>
     <header>
-      <h1>Pokédex</h1>
-      <nav>
-        <a href="poke.html">All Pokémon</a>
-        <a href="generation.html?gen=1">Gen 1</a>
-        <a href="generation.html?gen=2">Gen 2</a>
-        <a href="generation.html?gen=3">Gen 3</a>
-        <a href="generation.html?gen=4">Gen 4</a>
-        <a href="generation.html?gen=5">Gen 5</a>
-        <a href="generation.html?gen=6">Gen 6</a>
-        <a href="generation.html?gen=7">Gen 7</a>
-        <a href="generation.html?gen=8">Gen 8</a>
-        <a href="generation.html?gen=9">Gen 9</a>
-      </nav>
-
-      <div class="filters">
-        <input
-          type="text"
-          id="search"
-          placeholder="Search Pokémon by ID or name..."
-        />
-        <select id="typeFilter">
-          <option value="">All Types</option>
-        </select>
-        <select id="sortFilter">
-          <option value="id-asc">ID ↑</option>
-          <option value="id-desc">ID ↓</option>
-          <option value="name-asc">Name A–Z</option>
-          <option value="name-desc">Name Z–A</option>
-        </select>
-      </div>
+      <h1>PokeDex</h1>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search Pokémon by name or ID..."
+      />
     </header>
 
+    <nav>
+      <a href="generation.html?gen=1">Gen 1</a>
+      <a href="generation.html?gen=2">Gen 2</a>
+      <a href="generation.html?gen=3">Gen 3</a>
+      <a href="generation.html?gen=4">Gen 4</a>
+      <a href="generation.html?gen=5">Gen 5</a>
+      <a href="generation.html?gen=6">Gen 6</a>
+      <a href="generation.html?gen=7">Gen 7</a>
+      <a href="generation.html?gen=8">Gen 8</a>
+      <a href="generation.html?gen=9">Gen 9</a>
+    </nav>
+
     <main id="pokemonList" class="pokemon-list"></main>
-    <button id="loadMoreBtn">Load more</button>
+
+    <!-- 🧩 МОДАЛЬНОЕ ОКНО -->
+    <div id="pokemonModal" class="modal">
+      <div class="modal-content">
+        <span id="closeModal">&times;</span>
+        <div id="pokemonDetails"></div>
+      </div>
+    </div>
   </body>
 </html>

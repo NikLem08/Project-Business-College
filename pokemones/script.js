@@ -1,97 +1,174 @@
 const pokemonList = document.getElementById("pokemonList");
-const searchInput = document.getElementById("search");
-const typeFilter = document.getElementById("typeFilter");
-const sortFilter = document.getElementById("sortFilter");
-const loadMoreBtn = document.getElementById("loadMoreBtn");
+const modal = document.getElementById("pokemonModal");
+const modalContent = document.getElementById("pokemonDetails");
+const closeModal = document.getElementById("closeModal");
 
-let allPokemon = [];
-let displayedCount = 0;
-const batchSize = 50; // Показываем по 50
+// Элемент для поиска
+const searchInput = document.getElementById("searchInput");
+let allPokemons = []; // Массив для хранения всех загруженных покемонов
 
-async function fetchAllPokemon() {
-  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000");
+// --- 1. Логика загрузки и поиска ---
+
+// Загружаем первых 151 покемона (Gen 1)
+async function fetchPokemons() {
+  // Загружаем список 151
+  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
   const data = await res.json();
-  const results = await Promise.all(
-    data.results.map(async (p) => {
-      const details = await fetch(p.url).then((r) => r.json());
-      return {
-        id: details.id,
-        name: details.name,
-        types: details.types.map((t) => t.type.name),
-        image: details.sprites.other["official-artwork"].front_default,
-      };
-    })
-  );
-  allPokemon = results;
-  updateTypeFilter();
-  updateDisplay();
-}
 
-function updateTypeFilter() {
-  const types = [...new Set(allPokemon.flatMap((p) => p.types))].sort();
-  typeFilter.innerHTML += types
-    .map((t) => `<option value="${t}">${t}</option>`)
-    .join("");
-}
-
-function getFilteredPokemon() {
-  const search = searchInput.value.toLowerCase();
-  const type = typeFilter.value;
-  const sort = sortFilter.value;
-
-  let filtered = allPokemon.filter(
-    (p) =>
-      (p.name.includes(search) || p.id.toString().includes(search)) &&
-      (type === "" || p.types.includes(type))
-  );
-
-  switch (sort) {
-    case "id-desc":
-      filtered.sort((a, b) => b.id - a.id);
-      break;
-    case "name-asc":
-      filtered.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case "name-desc":
-      filtered.sort((a, b) => b.name.localeCompare(a.name));
-      break;
-    default:
-      filtered.sort((a, b) => a.id - b.id);
-  }
-
-  return filtered;
-}
-
-function displayNextBatch() {
-  const filtered = getFilteredPokemon();
-  const nextBatch = filtered.slice(displayedCount, displayedCount + batchSize);
-
-  nextBatch.forEach((p) => {
-    const card = document.createElement("div");
-    card.className = "pokemon-card";
-    card.innerHTML = `
-      <img src="${p.image}" alt="${p.name}">
-      <h3>#${p.id} ${p.name}</h3>
-      <p>${p.types.join(", ")}</p>
-    `;
-    pokemonList.appendChild(card);
+  // Создаем промисы для детальной информации о каждом покемоне
+  const fetchPromises = data.results.map(async (pokemon) => {
+    const pokeRes = await fetch(pokemon.url);
+    return pokeRes.json();
   });
 
-  displayedCount += nextBatch.length;
+  // Ждем все детали и сохраняем
+  allPokemons = await Promise.all(fetchPromises);
 
-  loadMoreBtn.style.display =
-    displayedCount >= filtered.length ? "none" : "block";
+  // Применяем начальную сортировку
+  allPokemons.sort((a, b) => a.id - b.id);
+
+  // Изначально отображаем всех
+  applySearchAndRender();
 }
 
-function updateDisplay() {
-  pokemonList.innerHTML = "";
-  displayedCount = 0;
-  displayNextBatch();
+// Функция применения поиска и отрисовки
+function applySearchAndRender() {
+  let currentPokemons = [...allPokemons]; // Копируем массив
+
+  // --- Поиск по имени/ID ---
+  const searchTerm = searchInput.value.toLowerCase().trim();
+  if (searchTerm) {
+    currentPokemons = currentPokemons.filter((pokemon) => {
+      // Поиск по имени (включая) ИЛИ по ID (начинается с)
+      const nameMatch = pokemon.name.toLowerCase().includes(searchTerm);
+      const idMatch = String(pokemon.id).startsWith(searchTerm);
+      return nameMatch || idMatch;
+    });
+  }
+
+  renderPokemonList(currentPokemons);
 }
 
-searchInput.addEventListener("input", updateDisplay);
-typeFilter.addEventListener("change", updateDisplay);
-sortFilter.addEventListener("change", updateDisplay);
-loadMoreBtn.addEventListener("click", displayNextBatch);
+// Функция для отображения списка покемонов
+function renderPokemonList(pokemons) {
+  pokemonList.innerHTML = ""; // Очищаем список перед отрисовкой
+  if (pokemons.length === 0) {
+    pokemonList.innerHTML =
+      '<p class="no-results">No Pokémon found matching your criteria.</p>';
+    return;
+  }
+  pokemons.forEach(renderPokemon);
+}
 
-fetchAllPokemon();
+function renderPokemon(pokemon) {
+  const card = document.createElement("div");
+  card.classList.add("pokemon-card");
+  card.innerHTML = `
+    <img src="${
+      pokemon.sprites.other["official-artwork"].front_default
+    }" alt="${pokemon.name}">
+    <p class="pokemon-id">#${pokemon.id}</p>
+    <h3>${pokemon.name.toUpperCase()}</h3>
+    <div class="types-container">
+        ${pokemon.types
+          .map(
+            (t) =>
+              `<span class="pokemon-type type-${
+                t.type.name
+              }">${t.type.name.toUpperCase()}</span>`
+          )
+          .join("")}
+    </div>
+  `;
+  card.addEventListener("click", () => showPokemonDetails(pokemon.id));
+  pokemonList.appendChild(card);
+}
+
+// Обработчик события для поиска
+searchInput.addEventListener("input", applySearchAndRender);
+
+// --- 2. Логика модального окна ---
+
+async function showPokemonDetails(id) {
+  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
+  const data = await res.json();
+
+  const statIcons = {
+    hp: "❤️",
+    attack: "⚔️",
+    defense: "🛡️",
+    "special-attack": "🔥",
+    "special-defense": "💎",
+    speed: "⚡",
+  };
+
+  const images = {
+    normal: data.sprites.other["official-artwork"]?.front_default,
+    shiny: data.sprites?.front_shiny,
+  };
+
+  let current = "normal"; // текущее изображение
+
+  modalContent.innerHTML = `
+    <h2>${data.name.toUpperCase()} (#${data.id})</h2>
+    <div class="image-container">
+      <img id="pokemonImage" src="${images.normal}" alt="${data.name}">
+      <button id="toggleImageBtn">Switch Image</button>
+    </div>
+    <p><b>Types:</b> 
+        ${data.types
+          .map(
+            (t) =>
+              `<span class="pokemon-type type-${
+                t.type.name
+              }">${t.type.name.toUpperCase()}</span>`
+          )
+          .join("")}
+    </p>
+    <h3>Stats</h3>
+    <ul>
+      ${data.stats
+        .map(
+          (s) => `
+            <li>
+              <span>${
+                statIcons[s.stat.name] || "•"
+              } ${s.stat.name.toUpperCase()}</span>
+              <strong>${s.base_stat}</strong>
+            </li>
+          `
+        )
+        .join("")}
+    </ul>
+    <h3>Moves (Top 10)</h3>
+    <p>${data.moves
+      .slice(0, 10)
+      .map((m) => m.move.name.toUpperCase())
+      .join(", ")}</p>
+  `;
+
+  modal.style.display = "flex";
+
+  // Добавляем кнопку переключения картинки
+  const toggleBtn = document.getElementById("toggleImageBtn");
+  const imageEl = document.getElementById("pokemonImage");
+
+  toggleBtn.addEventListener("click", () => {
+    if (current === "normal") {
+      imageEl.src = images.shiny || images.normal;
+      toggleBtn.textContent = "Switch Back";
+      current = "shiny";
+    } else {
+      imageEl.src = images.normal;
+      toggleBtn.textContent = "Switch Image";
+      current = "normal";
+    }
+  });
+}
+
+closeModal.addEventListener("click", () => (modal.style.display = "none"));
+window.addEventListener("click", (e) => {
+  if (e.target === modal) modal.style.display = "none";
+});
+
+fetchPokemons();

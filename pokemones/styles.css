@@ -1,0 +1,400 @@
+/* === Общий стиль сайта === */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #f8f9fb;
+  color: #333;
+}
+
+/* === Верхняя панель (header) === */
+header {
+  background-color: #ef5350; /* Красный Pokémon */
+  color: white;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between; /* Заголовок слева, Поиск/Фильтры справа */
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: 1px;
+  color: white;
+}
+
+/* --- Стили для поля поиска (используется на poke.html) --- */
+#searchInput {
+  padding: 10px 15px;
+  border: 2px solid #ffcb05; /* Pokémon желтый */
+  border-radius: 20px;
+  font-size: 16px;
+  width: 250px;
+  max-width: 100%;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  color: #333;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#searchInput:focus {
+  border-color: #2a75bb; /* Pokémon синий при фокусе */
+  box-shadow: 0 0 8px rgba(42, 117, 187, 0.5);
+}
+
+#searchInput::placeholder {
+  color: #999;
+}
+
+/* Контейнер для фильтров справа сверху (на странице генераций) */
+.search-and-filters {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* === Навигация (ссылки поколений) === */
+nav {
+  background-color: #ffcb05; /* Желтый Pokémon */
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav a {
+  color: #2a75bb; /* Pokémon синий */
+  text-decoration: none;
+  margin: 0 10px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+nav a:hover {
+  color: #ef5350; /* Pokémon красный при наведении */
+}
+
+/* === Стили для фильтров и сортировки (На странице генераций) === */
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.filters select {
+  padding: 8px 15px;
+  border: 2px solid #ffcb05; /* Pokémon желтый */
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #333;
+  cursor: pointer;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="%232a75bb" d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+  transition: border-color 0.3s ease;
+  min-width: 100px;
+}
+
+.filters select:hover {
+  border-color: #2a75bb; /* Pokémon синий при наведении */
+}
+
+/* === Медиа-запросы для адаптивности === */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+  header h1 {
+    margin-bottom: 10px;
+  }
+  /* Делаем поиск/фильтры по центру на маленьких экранах */
+  #searchInput,
+  .search-and-filters {
+    width: 100%;
+    align-items: center;
+  }
+  .filters {
+    justify-content: center;
+  }
+}
+
+/* === Стили для списка покемонов === */
+.pokemon-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.pokemon-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  padding: 15px;
+  text-align: center;
+  width: 180px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.pokemon-card img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 10px;
+}
+
+.pokemon-id {
+  font-size: 14px;
+  font-weight: 700;
+  color: #a0a0a0;
+  margin: 0;
+}
+
+.pokemon-card h3 {
+  margin: 5px 0 10px 0;
+  font-size: 18px;
+  color: #3d7dca;
+  text-transform: uppercase;
+}
+
+.no-results {
+  font-size: 20px;
+  color: #ef5350;
+  padding: 50px;
+  width: 100%;
+  text-align: center;
+}
+
+/* === Стили для элементов типов (Type Badges) === */
+
+.types-container {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.pokemon-type {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Цвета для каждого типа */
+.type-normal {
+  background-color: #a8a878;
+}
+.type-fire {
+  background-color: #f08030;
+}
+.type-water {
+  background-color: #6890f0;
+}
+.type-grass {
+  background-color: #78c850;
+}
+.type-electric {
+  background-color: #f8d030;
+}
+.type-ice {
+  background-color: #98d8d8;
+}
+.type-fighting {
+  background-color: #c03028;
+}
+.type-poison {
+  background-color: #a040a0;
+}
+.type-ground {
+  background-color: #e0c068;
+}
+.type-flying {
+  background-color: #a890f0;
+}
+.type-psychic {
+  background-color: #f85888;
+}
+.type-bug {
+  background-color: #a8b820;
+}
+.type-rock {
+  background-color: #b8a038;
+}
+.type-ghost {
+  background-color: #705898;
+}
+.type-dragon {
+  background-color: #7038f8;
+}
+.type-steel {
+  background-color: #b8b8d0;
+}
+.type-dark {
+  background-color: #705848;
+}
+.type-fairy {
+  background-color: #ee99ac;
+}
+
+/* === Стили для модального окна === */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  padding: 20px;
+  border-radius: 15px;
+  width: 90%;
+  max-width: 450px;
+  position: relative;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  animation: popIn 0.3s ease-out;
+}
+
+#closeModal {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+}
+
+#closeModal:hover,
+#closeModal:focus {
+  color: #ef5350;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Детали покемона в модальном окне */
+#pokemonDetails h2 {
+  color: #ef5350;
+  text-shadow: 1px 1px 0 #ffcb05;
+  margin-top: 10px;
+}
+
+#pokemonDetails .image-container {
+  padding: 10px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+#pokemonDetails img {
+  max-width: 150px;
+  height: auto;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+#pokemonDetails h3 {
+  color: #2a75bb;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 5px;
+  margin-top: 20px;
+}
+
+/* Список статов */
+#pokemonDetails ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto 10px;
+  text-align: left;
+  width: 90%;
+}
+
+#pokemonDetails li {
+  background: #f9f9f9;
+  margin: 4px 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Moves */
+#pokemonDetails p:last-of-type {
+  font-size: 13px;
+  color: #444;
+  background: #f4f4f4;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Кнопка переключения изображения в модальном окне */
+#toggleImageBtn {
+  background-color: #2a75bb;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+#toggleImageBtn:hover {
+  background-color: #3d7dca;
+}
+
+/* === Анимации === */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
