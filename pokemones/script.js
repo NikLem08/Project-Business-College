@@ -1,15 +1,15 @@
 const pokemonList = document.getElementById("pokemonList");
+const searchInput = document.getElementById("search");
 const typeFilter = document.getElementById("typeFilter");
 const sortFilter = document.getElementById("sortFilter");
-const searchInput = document.getElementById("search");
 const loadMoreBtn = document.getElementById("loadMoreBtn");
 
 let allPokemon = [];
-let visibleCount = 0;
-const batchSize = 50;
+let displayedCount = 0;
+const batchSize = 50; // Показываем по 50
 
-async function fetchPokemonData() {
-  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1025");
+async function fetchAllPokemon() {
+  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1000");
   const data = await res.json();
   const results = await Promise.all(
     data.results.map(async (p) => {
@@ -17,36 +17,34 @@ async function fetchPokemonData() {
       return {
         id: details.id,
         name: details.name,
-        // Haetaan Pokémonin kuva ja tyypit API-datasta
-        image: details.sprites.other["official-artwork"].front_default,
         types: details.types.map((t) => t.type.name),
+        image: details.sprites.other["official-artwork"].front_default,
       };
     })
   );
   allPokemon = results;
   updateTypeFilter();
-  renderPokemon();
+  updateDisplay();
 }
 
 function updateTypeFilter() {
-  // Haetaan kaikki Pokémon-tyypit listasta, poistetaan duplikaatit ja laitetaan aakkosjärjestykseen
   const types = [...new Set(allPokemon.flatMap((p) => p.types))].sort();
   typeFilter.innerHTML += types
     .map((t) => `<option value="${t}">${t}</option>`)
     .join("");
 }
 
-function applyFilters() {
+function getFilteredPokemon() {
+  const search = searchInput.value.toLowerCase();
   const type = typeFilter.value;
   const sort = sortFilter.value;
-  const search = searchInput.value.trim();
 
-  let filtered = allPokemon;
+  let filtered = allPokemon.filter(
+    (p) =>
+      (p.name.includes(search) || p.id.toString().includes(search)) &&
+      (type === "" || p.types.includes(type))
+  );
 
-  if (type) filtered = filtered.filter((p) => p.types.includes(type));
-  if (search) filtered = filtered.filter((p) => p.id === Number(search));
-
-  // Tarkistetaan valittu lajittelutapa ja lajitellaan sen mukaan
   switch (sort) {
     case "id-desc":
       filtered.sort((a, b) => b.id - a.id);
@@ -64,39 +62,36 @@ function applyFilters() {
   return filtered;
 }
 
-function renderPokemon() {
-  const filtered = applyFilters();
-  const visible = filtered.slice(0, visibleCount + batchSize);
-  visibleCount = visible.length;
+function displayNextBatch() {
+  const filtered = getFilteredPokemon();
+  const nextBatch = filtered.slice(displayedCount, displayedCount + batchSize);
 
-  pokemonList.innerHTML = visible
-    .map(
-      (p) => `
-    <div class="pokemon-card">
+  nextBatch.forEach((p) => {
+    const card = document.createElement("div");
+    card.className = "pokemon-card";
+    card.innerHTML = `
       <img src="${p.image}" alt="${p.name}">
-      <p>#${p.id}</p>
-      <h3>${p.name}</h3>
+      <h3>#${p.id} ${p.name}</h3>
       <p>${p.types.join(", ")}</p>
-    </div>
-  `
-    )
-    .join("");
+    `;
+    pokemonList.appendChild(card);
+  });
 
-  loadMoreBtn.style.display = visibleCount < filtered.length ? "block" : "none";
+  displayedCount += nextBatch.length;
+
+  loadMoreBtn.style.display =
+    displayedCount >= filtered.length ? "none" : "block";
 }
 
-loadMoreBtn.addEventListener("click", renderPokemon);
-typeFilter.addEventListener("change", () => {
-  visibleCount = 0;
-  renderPokemon();
-});
-sortFilter.addEventListener("change", () => {
-  visibleCount = 0;
-  renderPokemon();
-});
-searchInput.addEventListener("input", () => {
-  visibleCount = 0;
-  renderPokemon();
-});
+function updateDisplay() {
+  pokemonList.innerHTML = "";
+  displayedCount = 0;
+  displayNextBatch();
+}
 
-fetchPokemonData();
+searchInput.addEventListener("input", updateDisplay);
+typeFilter.addEventListener("change", updateDisplay);
+sortFilter.addEventListener("change", updateDisplay);
+loadMoreBtn.addEventListener("click", displayNextBatch);
+
+fetchAllPokemon();
