@@ -15,6 +15,7 @@ const genRanges = {
   9: [906, 1025],
 };
 
+// Haetaan URL-osoitteen parametrit (esim. generation.html?gen=2)
 const urlParams = new URLSearchParams(window.location.search);
 const gen = urlParams.get("gen");
 genTitle.textContent = `Generation ${gen}`;
@@ -26,6 +27,7 @@ async function fetchPokemonData() {
   const res = await fetch(
     `https://pokeapi.co/api/v2/pokemon?limit=${end}&offset=${start - 1}`
   );
+  // Muutetaan API:n vastaus JSON-muotoon
   const data = await res.json();
   const results = await Promise.all(
     data.results.map(async (p) => {

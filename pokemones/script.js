@@ -17,6 +17,7 @@ async function fetchPokemonData() {
       return {
         id: details.id,
         name: details.name,
+        // Haetaan Pokémonin kuva ja tyypit API-datasta
         image: details.sprites.other["official-artwork"].front_default,
         types: details.types.map((t) => t.type.name),
       };
@@ -28,6 +29,7 @@ async function fetchPokemonData() {
 }
 
 function updateTypeFilter() {
+  // Haetaan kaikki Pokémon-tyypit listasta, poistetaan duplikaatit ja laitetaan aakkosjärjestykseen
   const types = [...new Set(allPokemon.flatMap((p) => p.types))].sort();
   typeFilter.innerHTML += types
     .map((t) => `<option value="${t}">${t}</option>`)
@@ -44,6 +46,7 @@ function applyFilters() {
   if (type) filtered = filtered.filter((p) => p.types.includes(type));
   if (search) filtered = filtered.filter((p) => p.id === Number(search));
 
+  // Tarkistetaan valittu lajittelutapa ja lajitellaan sen mukaan
   switch (sort) {
     case "id-desc":
       filtered.sort((a, b) => b.id - a.id);
