@@ -4,45 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Pokémon Generation</title>
-    <link rel="stylesheet" href="poke.css" />
-    <script src="script.js" defer></script>
-    <script src="ui.js" defer></script>
-    <script src="api.js" defer></script>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="generation.js" defer></script>
   </head>
   <body>
     <header>
-      <h1 id="generationTitle">Pokémon Generation</h1>
+      <h1 id="genTitle"></h1>
       <nav>
-        <a href="poke.html">← Back to Search</a>
+        <a href="poke.html">All Pokémon</a>
+        <a href="generation.html?gen=1">Gen 1</a>
+        <a href="generation.html?gen=2">Gen 2</a>
+        <a href="generation.html?gen=3">Gen 3</a>
+        <a href="generation.html?gen=4">Gen 4</a>
+        <a href="generation.html?gen=5">Gen 5</a>
+        <a href="generation.html?gen=6">Gen 6</a>
+        <a href="generation.html?gen=7">Gen 7</a>
+        <a href="generation.html?gen=8">Gen 8</a>
+        <a href="generation.html?gen=9">Gen 9</a>
       </nav>
-      <div>
-        <label>Filter by Type:</label>
+      <div class="filters">
         <select id="typeFilter">
-          <option value="">All</option>
-          <option value="normal">Normal</option>
-          <option value="fire">Fire</option>
-          <option value="water">Water</option>
-          <option value="grass">Grass</option>
-          <option value="electric">Electric</option>
-          <option value="ice">Ice</option>
-          <option value="fighting">Fighting</option>
-          <option value="poison">Poison</option>
-          <option value="ground">Ground</option>
-          <option value="flying">Flying</option>
-          <option value="psychic">Psychic</option>
-          <option value="bug">Bug</option>
-          <option value="rock">Rock</option>
-          <option value="ghost">Ghost</option>
-          <option value="dragon">Dragon</option>
-          <option value="dark">Dark</option>
-          <option value="steel">Steel</option>
-          <option value="fairy">Fairy</option>
+          <option value="">All Types</option>
+        </select>
+        <select id="sortFilter">
+          <option value="id-asc">ID ↑</option>
+          <option value="id-desc">ID ↓</option>
+          <option value="name-asc">Name A–Z</option>
+          <option value="name-desc">Name Z–A</option>
         </select>
       </div>
     </header>
 
-    <main>
-      <div id="pokemonList" class="pokemon-list"></div>
-    </main>
+    <main id="pokemonList" class="pokemon-list"></main>
   </body>
 </html>

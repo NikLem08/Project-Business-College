@@ -1,15 +1,31 @@
 const pokemonList = document.getElementById("pokemonList");
 const typeFilter = document.getElementById("typeFilter");
 const sortFilter = document.getElementById("sortFilter");
-const searchInput = document.getElementById("search");
-const loadMoreBtn = document.getElementById("loadMoreBtn");
+const genTitle = document.getElementById("genTitle");
+
+const genRanges = {
+  1: [1, 151],
+  2: [152, 251],
+  3: [252, 386],
+  4: [387, 493],
+  5: [494, 649],
+  6: [650, 721],
+  7: [722, 809],
+  8: [810, 905],
+  9: [906, 1025],
+};
+
+const urlParams = new URLSearchParams(window.location.search);
+const gen = urlParams.get("gen");
+genTitle.textContent = `Generation ${gen}`;
 
 let allPokemon = [];
-let visibleCount = 0;
-const batchSize = 50;
 
 async function fetchPokemonData() {
-  const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=1025");
+  const [start, end] = genRanges[gen];
+  const res = await fetch(
+    `https://pokeapi.co/api/v2/pokemon?limit=${end}&offset=${start - 1}`
+  );
   const data = await res.json();
   const results = await Promise.all(
     data.results.map(async (p) => {
@@ -37,12 +53,9 @@ function updateTypeFilter() {
 function applyFilters() {
   const type = typeFilter.value;
   const sort = sortFilter.value;
-  const search = searchInput.value.trim();
 
   let filtered = allPokemon;
-
   if (type) filtered = filtered.filter((p) => p.types.includes(type));
-  if (search) filtered = filtered.filter((p) => p.id === Number(search));
 
   switch (sort) {
     case "id-desc":
@@ -63,10 +76,7 @@ function applyFilters() {
 
 function renderPokemon() {
   const filtered = applyFilters();
-  const visible = filtered.slice(0, visibleCount + batchSize);
-  visibleCount = visible.length;
-
-  pokemonList.innerHTML = visible
+  pokemonList.innerHTML = filtered
     .map(
       (p) => `
     <div class="pokemon-card">
@@ -78,22 +88,9 @@ function renderPokemon() {
   `
     )
     .join("");
-
-  loadMoreBtn.style.display = visibleCount < filtered.length ? "block" : "none";
 }
 
-loadMoreBtn.addEventListener("click", renderPokemon);
-typeFilter.addEventListener("change", () => {
-  visibleCount = 0;
-  renderPokemon();
-});
-sortFilter.addEventListener("change", () => {
-  visibleCount = 0;
-  renderPokemon();
-});
-searchInput.addEventListener("input", () => {
-  visibleCount = 0;
-  renderPokemon();
-});
+typeFilter.addEventListener("change", renderPokemon);
+sortFilter.addEventListener("change", renderPokemon);
 
 fetchPokemonData();
