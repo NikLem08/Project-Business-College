@@ -381,3 +381,32 @@ nav a:hover {
     opacity: 1;
   }
 }
+
+.load-more-btn {
+  display: block;
+  margin: 20px auto;
+  padding: 12px 25px;
+  background-color: #2a75bb;
+  color: white;
+  border: 3px solid #ffcb05;
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.load-more-btn:hover {
+  background-color: #3d7dca;
+  transform: translateY(-2px);
+}
+
+.load-more-btn:disabled {
+  background-color: #ccc;
+  border-color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
