@@ -9,10 +9,9 @@ const closeModal = document.getElementById("closeModal");
 const typeFilter = document.getElementById("typeFilter");
 const sortFilter = document.getElementById("sortFilter");
 
-let allPokemons = []; 
+let allPokemons = [];
 
 genTitle.textContent = `Pokémon Generation ${genNumber}`;
-
 
 async function fetchTypes() {
   const res = await fetch("https://pokeapi.co/api/v2/type");
@@ -32,11 +31,10 @@ async function fetchTypes() {
 
 async function fetchGeneration(gen) {
   const res = await fetch(`https://pokeapi.co/api/v2/generation/${gen}`);
-  const data = await res.json()
+  const data = await res.json();
 
   const fetchPromises = data.pokemon_species.map(async (p) => {
     try {
-
       const pokeRes = await fetch(
         `https://pokeapi.co/api/v2/pokemon/${p.name}`
       );
@@ -46,18 +44,16 @@ async function fetchGeneration(gen) {
         return null;
       }
 
-      return pokeRes.json()
+      return pokeRes.json();
     } catch (e) {
-     
       console.error(`Error fetching data for ${p.name}:`, e);
       return null;
     }
   });
 
-  allPokemons = (await Promise.all(fetchPromises))
-
-    .filter((pokemon) => pokemon && pokemon.id);
-
+  allPokemons = (await Promise.all(fetchPromises)).filter(
+    (pokemon) => pokemon && pokemon.id
+  );
 
   allPokemons.sort((a, b) => a.id - b.id);
 
@@ -65,15 +61,12 @@ async function fetchGeneration(gen) {
   applyFiltersAndSort();
 }
 
-
 function applyFiltersAndSort() {
-  let currentPokemons = [...allPokemons]; 
-
+  let currentPokemons = [...allPokemons];
 
   const selectedType = typeFilter.value;
   if (selectedType) {
     currentPokemons = currentPokemons.filter((pokemon) =>
-
       pokemon.types.some((t) => t.type.name === selectedType)
     );
   }
@@ -121,9 +114,9 @@ function renderPokemon(pokemon) {
         ${pokemon.types
           .map(
             (t) =>
-              `<span class="pokemon-type type-${
+              `<span class="pokemon-type type-icon ${
                 t.type.name
-              }">${t.type.name.toUpperCase()}</span>`
+              }" title="${t.type.name.toUpperCase()}"></span>`
           )
           .join("")}
     </div>
@@ -132,11 +125,8 @@ function renderPokemon(pokemon) {
   pokemonList.appendChild(card);
 }
 
-
 typeFilter.addEventListener("change", applyFiltersAndSort);
 sortFilter.addEventListener("change", applyFiltersAndSort);
-
-
 
 async function showPokemonDetails(id) {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
@@ -158,48 +148,80 @@ async function showPokemonDetails(id) {
 
   let current = "normal";
 
+  const abilitiesList = data.abilities
+    .map(
+      (a) =>
+        `<li><span>${a.ability.name.toUpperCase()}</span><strong>${
+          a.is_hidden ? "HIDDEN" : "STANDARD"
+        }</strong></li>`
+    )
+    .join("");
+
+  const cryUrl = data.cries.latest || data.cries.legacy;
+  const cryButton = cryUrl
+    ? `<button id="playCryBtn" class="cry-button">🔊</button>`
+    : "";
+
   modalContent.innerHTML = `
-    <h2>${data.name.toUpperCase()} (#${data.id})</h2>
-    <div class="image-container">
-      <img id="pokemonImage" src="${images.normal}" alt="${data.name}">
-      <button id="toggleImageBtn">Switch Image</button>
+    <div class="modal-header">
+        <h2>${data.name.toUpperCase()} (#${data.id})${cryButton}</h2>
+        <span class="close-modal-btn" id="closeModal">&times;</span>
     </div>
-    <p><b>Types:</b> 
-        ${data.types
+    <div class="modal-body">
+        <div class="image-container">
+            <img id="pokemonImage" src="${images.normal}" alt="${data.name}">
+            <button id="toggleImageBtn">Switch Image</button>
+        </div>
+        <p><b>Types:</b> 
+            ${data.types
+              .map(
+                (t) =>
+                  `<span class="pokemon-type type-icon ${
+                    t.type.name
+                  }" title="${t.type.name.toUpperCase()}"></span>`
+              )
+              .join("")}
+        </p>
+        <h3>General Info</h3>
+        <ul>
+            <li><span>HEIGHT</span><strong>${data.height / 10} m</strong></li>
+            <li><span>WEIGHT</span><strong>${data.weight / 10} kg</strong></li>
+            <li><span>BASE EXP.</span><strong>${
+              data.base_experience
+            }</strong></li>
+        </ul>
+        <h3>Abilities</h3>
+        <ul>
+            ${abilitiesList}
+        </ul>
+        <h3>Base Stats</h3>
+        <ul>
+        ${data.stats
           .map(
-            (t) =>
-              `<span class="pokemon-type type-${
-                t.type.name
-              }">${t.type.name.toUpperCase()}</span>`
+            (s) => `
+                <li>
+                <span>${
+                  statIcons[s.stat.name] || "•"
+                } ${s.stat.name.toUpperCase()}</span>
+                <strong>${s.base_stat}</strong>
+                </li>
+            `
           )
           .join("")}
-    </p>
-    <h3>Stats</h3>
-    <ul>
-      ${data.stats
-        .map(
-          (s) => `
-            <li>
-              <span>${
-                statIcons[s.stat.name] || "•"
-              } ${s.stat.name.toUpperCase()}</span>
-              <strong>${s.base_stat}</strong>
-            </li>
-          `
-        )
-        .join("")}
-    </ul>
-    <h3>Moves (Top 10)</h3>
-    <p>${data.moves
-      .slice(0, 10)
-      .map((m) => m.move.name.toUpperCase())
-      .join(", ")}</p>
+        </ul>
+        <h3>Moves (Top 10)</h3>
+        <p>${data.moves
+          .slice(0, 10)
+          .map((m) => m.move.name.toUpperCase())
+          .join(", ")}</p>
+    </div>
   `;
 
   modal.style.display = "flex";
 
   const toggleBtn = document.getElementById("toggleImageBtn");
   const imageEl = document.getElementById("pokemonImage");
+  const playCryBtn = document.getElementById("playCryBtn");
 
   toggleBtn.addEventListener("click", () => {
     if (current === "normal") {
@@ -211,6 +233,17 @@ async function showPokemonDetails(id) {
       toggleBtn.textContent = "Switch Image";
       current = "normal";
     }
+  });
+
+  if (playCryBtn && cryUrl) {
+    playCryBtn.addEventListener("click", () => {
+      const audio = new Audio(cryUrl);
+      audio.play();
+    });
+  }
+
+  document.getElementById("closeModal").addEventListener("click", () => {
+    modal.style.display = "none";
   });
 }
 
