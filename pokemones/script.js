@@ -3,43 +3,31 @@ const modal = document.getElementById("pokemonModal");
 const modalContent = document.getElementById("pokemonDetails");
 const closeModal = document.getElementById("closeModal");
 
-// Элемент для поиска
 const searchInput = document.getElementById("searchInput");
-let allPokemons = []; // Массив для хранения всех загруженных покемонов
+let allPokemons = [];
 
-// --- 1. Логика загрузки и поиска ---
-
-// Загружаем первых 151 покемона (Gen 1)
 async function fetchPokemons() {
-  // Загружаем список 151
   const res = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
   const data = await res.json();
 
-  // Создаем промисы для детальной информации о каждом покемоне
   const fetchPromises = data.results.map(async (pokemon) => {
     const pokeRes = await fetch(pokemon.url);
     return pokeRes.json();
   });
 
-  // Ждем все детали и сохраняем
   allPokemons = await Promise.all(fetchPromises);
 
-  // Применяем начальную сортировку
   allPokemons.sort((a, b) => a.id - b.id);
 
-  // Изначально отображаем всех
   applySearchAndRender();
 }
 
-// Функция применения поиска и отрисовки
 function applySearchAndRender() {
-  let currentPokemons = [...allPokemons]; // Копируем массив
+  let currentPokemons = [...allPokemons];
 
-  // --- Поиск по имени/ID ---
   const searchTerm = searchInput.value.toLowerCase().trim();
   if (searchTerm) {
     currentPokemons = currentPokemons.filter((pokemon) => {
-      // Поиск по имени (включая) ИЛИ по ID (начинается с)
       const nameMatch = pokemon.name.toLowerCase().includes(searchTerm);
       const idMatch = String(pokemon.id).startsWith(searchTerm);
       return nameMatch || idMatch;
@@ -49,9 +37,8 @@ function applySearchAndRender() {
   renderPokemonList(currentPokemons);
 }
 
-// Функция для отображения списка покемонов
 function renderPokemonList(pokemons) {
-  pokemonList.innerHTML = ""; // Очищаем список перед отрисовкой
+  pokemonList.innerHTML = "";
   if (pokemons.length === 0) {
     pokemonList.innerHTML =
       '<p class="no-results">No Pokémon found matching your criteria.</p>';
@@ -69,7 +56,7 @@ function renderPokemon(pokemon) {
     }" alt="${pokemon.name}">
     <p class="pokemon-id">#${pokemon.id}</p>
     <h3>${pokemon.name.toUpperCase()}</h3>
-    <div class="types-container">
+    <div class="types-container"
         ${pokemon.types
           .map(
             (t) =>
@@ -84,10 +71,7 @@ function renderPokemon(pokemon) {
   pokemonList.appendChild(card);
 }
 
-// Обработчик события для поиска
 searchInput.addEventListener("input", applySearchAndRender);
-
-// --- 2. Логика модального окна ---
 
 async function showPokemonDetails(id) {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
@@ -107,7 +91,7 @@ async function showPokemonDetails(id) {
     shiny: data.sprites?.front_shiny,
   };
 
-  let current = "normal"; // текущее изображение
+  let current = "normal";
 
   modalContent.innerHTML = `
     <h2>${data.name.toUpperCase()} (#${data.id})</h2>
@@ -149,7 +133,6 @@ async function showPokemonDetails(id) {
 
   modal.style.display = "flex";
 
-  // Добавляем кнопку переключения картинки
   const toggleBtn = document.getElementById("toggleImageBtn");
   const imageEl = document.getElementById("pokemonImage");
 
