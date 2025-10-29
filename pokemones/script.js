@@ -3,92 +3,67 @@ const modal = document.getElementById("pokemonModal");
 const modalContent = document.getElementById("pokemonDetails");
 const closeModal = document.getElementById("closeModal");
 
-// Элемент для поиска
 const searchInput = document.getElementById("searchInput");
 const loadMoreBtn = document.getElementById("loadMoreBtn");
-const initialLoadingMessage = document.getElementById("initialLoadingMessage"); // НОВЫЙ ЭЛЕМЕНТ
+const initialLoadingMessage = document.getElementById("initialLoadingMessage");
 
-let allPokemons = []; // Массив для хранения ВСЕХ загруженных покемонов
-const renderChunkSize = 50; // Сколько покемонов отрисовывать за раз
-let currentRenderLimit = renderChunkSize; // Текущий лимит отрисовки
+let allPokemons = [];
+const renderChunkSize = 50;
+let currentRenderLimit = renderChunkSize;
 
-// --- 1. Логика загрузки, пагинации и поиска ---
-
-/**
- * Загружает ДЕТАЛИ для ВСЕХ покемонов и сохраняет в allPokemons.
- * Это позволяет мгновенно искать по всем данным.
- */
 async function fetchAllPokemonDetails() {
   initialLoadingMessage.style.display = "block";
 
-  // Шаг 1: Получаем список всех покемонов (используем большой лимит)
-  // Это быстрый запрос, который дает нам все имена и ссылки.
   const listRes = await fetch(
     "https://pokeapi.co/api/v2/pokemon?limit=100000&offset=0"
   );
   const listData = await listRes.json();
 
-  // Шаг 2: Создаем промисы для детальной информации о каждом покемоне
   const fetchPromises = listData.results.map(async (pokemon) => {
     const pokeRes = await fetch(pokemon.url);
-    if (!pokeRes.ok) return null; // Игнорируем проблемные записи
+    if (!pokeRes.ok) return null;
     return pokeRes.json();
   });
 
-  // Шаг 3: Ждем все детали и сохраняем
   allPokemons = (await Promise.all(fetchPromises)).filter((p) => p !== null);
 
-  // Сортируем по ID
   allPokemons.sort((a, b) => a.id - b.id);
 
-  initialLoadingMessage.style.display = "none"; // Скрываем сообщение о загрузке
+  initialLoadingMessage.style.display = "none";
 
-  // Изначально отображаем первую порцию
   applySearchAndRender();
 }
 
-// Обработчик события для кнопки "Load More"
 loadMoreBtn.addEventListener("click", () => {
-  loadMoreBtn.disabled = true; // Отключаем кнопку, чтобы избежать двойных кликов
+  loadMoreBtn.disabled = true;
 
-  // Увеличиваем лимит отрисовки
   currentRenderLimit += renderChunkSize;
 
-  // Запускаем отрисовку с новым лимитом
   applySearchAndRender();
 
-  loadMoreBtn.disabled = false; // Включаем кнопку после отрисовки
+  loadMoreBtn.disabled = false;
 });
 
-// Функция применения поиска и отрисовки (теперь управляет и пагинацией)
 function applySearchAndRender() {
-  let currentPokemons = [...allPokemons]; // Копируем массив
+  let currentPokemons = [...allPokemons];
 
   const searchTerm = searchInput.value.toLowerCase().trim();
 
-  // --- 1. Логика поиска ---
   if (searchTerm) {
     currentPokemons = currentPokemons.filter((pokemon) => {
-      // Поиск всегда работает по всему массиву 'allPokemons'
       const nameMatch = pokemon.name.toLowerCase().includes(searchTerm);
       const idMatch = String(pokemon.id).startsWith(searchTerm);
       return nameMatch || idMatch;
     });
 
-    // При активном поиске показываем ВСЕ найденные результаты
     loadMoreBtn.style.display = "none";
 
-    // Отрисовываем отфильтрованный список целиком
     renderPokemonList(currentPokemons);
   } else {
-    // --- 2. Логика пагинации (если поиск пуст) ---
-
-    // Берем только ту часть, которая должна быть отрисована
     const pokemonsToRender = currentPokemons.slice(0, currentRenderLimit);
 
     renderPokemonList(pokemonsToRender);
 
-    // Показываем/скрываем кнопку Load More
     if (currentRenderLimit < allPokemons.length) {
       loadMoreBtn.style.display = "block";
     } else {
@@ -116,7 +91,7 @@ function renderPokemon(pokemon) {
     }" alt="${pokemon.name}">
     <p class="pokemon-id">#${pokemon.id}</p>
     <h3>${pokemon.name.toUpperCase()}</h3>
-    <div class="types-container"
+    <div class="types-container">
         ${pokemon.types
           .map(
             (t) =>

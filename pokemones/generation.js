@@ -9,9 +9,10 @@ const closeModal = document.getElementById("closeModal");
 const typeFilter = document.getElementById("typeFilter");
 const sortFilter = document.getElementById("sortFilter");
 
-let allPokemons = [];
+let allPokemons = []; 
 
 genTitle.textContent = `Pokémon Generation ${genNumber}`;
+
 
 async function fetchTypes() {
   const res = await fetch("https://pokeapi.co/api/v2/type");
@@ -31,10 +32,11 @@ async function fetchTypes() {
 
 async function fetchGeneration(gen) {
   const res = await fetch(`https://pokeapi.co/api/v2/generation/${gen}`);
-  const data = await res.json();
+  const data = await res.json()
 
   const fetchPromises = data.pokemon_species.map(async (p) => {
     try {
+
       const pokeRes = await fetch(
         `https://pokeapi.co/api/v2/pokemon/${p.name}`
       );
@@ -44,16 +46,18 @@ async function fetchGeneration(gen) {
         return null;
       }
 
-      return pokeRes.json();
+      return pokeRes.json()
     } catch (e) {
+     
       console.error(`Error fetching data for ${p.name}:`, e);
       return null;
     }
   });
 
-  allPokemons = (await Promise.all(fetchPromises)).filter(
-    (pokemon) => pokemon && pokemon.id
-  );
+  allPokemons = (await Promise.all(fetchPromises))
+
+    .filter((pokemon) => pokemon && pokemon.id);
+
 
   allPokemons.sort((a, b) => a.id - b.id);
 
@@ -61,12 +65,15 @@ async function fetchGeneration(gen) {
   applyFiltersAndSort();
 }
 
+
 function applyFiltersAndSort() {
-  let currentPokemons = [...allPokemons];
+  let currentPokemons = [...allPokemons]; 
+
 
   const selectedType = typeFilter.value;
   if (selectedType) {
     currentPokemons = currentPokemons.filter((pokemon) =>
+
       pokemon.types.some((t) => t.type.name === selectedType)
     );
   }
@@ -125,8 +132,11 @@ function renderPokemon(pokemon) {
   pokemonList.appendChild(card);
 }
 
+
 typeFilter.addEventListener("change", applyFiltersAndSort);
 sortFilter.addEventListener("change", applyFiltersAndSort);
+
+
 
 async function showPokemonDetails(id) {
   const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);

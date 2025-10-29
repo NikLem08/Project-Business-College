@@ -4,7 +4,6 @@ body {
   background-color: #f8f9fb;
   color: #333;
 }
-
 header {
   background-color: #ef5350;
   color: white;
@@ -22,7 +21,6 @@ header h1 {
   letter-spacing: 1px;
   color: white;
 }
-
 #searchInput {
   padding: 10px 15px;
   border: 2px solid #ffcb05;
@@ -39,20 +37,18 @@ header h1 {
 
 #searchInput:focus {
   border-color: #2a75bb;
-  box-shadow: 0 0 8px rgba(42, 117, 187, 0.5);
+  box-shadow: 0 0 8px rga(42, 117, 187, 0.5);
 }
 
 #searchInput::placeholder {
   color: #999;
 }
-
 .search-and-filters {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   gap: 10px;
 }
-
 nav {
   background-color: #ffcb05;
   text-align: center;
@@ -108,7 +104,6 @@ nav a:hover {
   header h1 {
     margin-bottom: 10px;
   }
-
   #searchInput,
   .search-and-filters {
     width: 100%;
@@ -118,7 +113,6 @@ nav a:hover {
     justify-content: center;
   }
 }
-
 .pokemon-list {
   display: flex;
   flex-wrap: wrap;
@@ -191,7 +185,6 @@ nav a:hover {
   text-transform: uppercase;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-
 .type-normal {
   background-color: #a8a878;
 }
@@ -246,7 +239,6 @@ nav a:hover {
 .type-fairy {
   background-color: #ee99ac;
 }
-
 .modal {
   display: none;
   position: fixed;
@@ -290,7 +282,6 @@ nav a:hover {
   text-decoration: none;
   cursor: pointer;
 }
-
 #pokemonDetails h2 {
   color: #ef5350;
   text-shadow: 1px 1px 0 #ffcb05;
@@ -336,7 +327,6 @@ nav a:hover {
   display: flex;
   justify-content: space-between;
 }
-
 #pokemonDetails p:last-of-type {
   font-size: 13px;
   color: #444;
