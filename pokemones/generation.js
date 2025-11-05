@@ -4,7 +4,6 @@ const genTitle = document.getElementById("genTitle");
 const pokemonList = document.getElementById("pokemonList");
 const modal = document.getElementById("pokemonModal");
 const modalContent = document.getElementById("pokemonDetails");
-const closeModal = document.getElementById("closeModal");
 
 const typeFilter = document.getElementById("typeFilter");
 const sortFilter = document.getElementById("sortFilter");
@@ -40,13 +39,11 @@ async function fetchGeneration(gen) {
       );
 
       if (!pokeRes.ok) {
-        console.warn(`Skipping failed fetch for: ${p.name}`);
         return null;
       }
 
       return pokeRes.json();
     } catch (e) {
-      console.error(`Error fetching data for ${p.name}:`, e);
       return null;
     }
   });
@@ -58,13 +55,14 @@ async function fetchGeneration(gen) {
   allPokemons.sort((a, b) => a.id - b.id);
 
   await fetchTypes();
+
   applyFiltersAndSort();
 }
 
 function applyFiltersAndSort() {
   let currentPokemons = [...allPokemons];
-
   const selectedType = typeFilter.value;
+
   if (selectedType) {
     currentPokemons = currentPokemons.filter((pokemon) =>
       pokemon.types.some((t) => t.type.name === selectedType)
@@ -72,6 +70,7 @@ function applyFiltersAndSort() {
   }
 
   const sortValue = sortFilter.value;
+
   switch (sortValue) {
     case "id-asc":
       currentPokemons.sort((a, b) => a.id - b.id);
@@ -94,7 +93,7 @@ function renderPokemonList(pokemons) {
   pokemonList.innerHTML = "";
   if (pokemons.length === 0) {
     pokemonList.innerHTML =
-      '<p class="no-results">No Pokémon found matching your criteria.</p>';
+      '<p class="no-results">No Pokémon found in this generation.</p>';
     return;
   }
   pokemons.forEach(renderPokemon);
@@ -102,7 +101,6 @@ function renderPokemonList(pokemons) {
 
 function renderPokemon(pokemon) {
   const card = document.createElement("div");
-
   card.classList.add("pokemon-card");
   card.innerHTML = `
     <img src="${
@@ -222,6 +220,7 @@ async function showPokemonDetails(id) {
   const toggleBtn = document.getElementById("toggleImageBtn");
   const imageEl = document.getElementById("pokemonImage");
   const playCryBtn = document.getElementById("playCryBtn");
+  const closeModalBtn = document.getElementById("closeModal");
 
   toggleBtn.addEventListener("click", () => {
     if (current === "normal") {
@@ -242,12 +241,11 @@ async function showPokemonDetails(id) {
     });
   }
 
-  document.getElementById("closeModal").addEventListener("click", () => {
+  closeModalBtn.addEventListener("click", () => {
     modal.style.display = "none";
   });
 }
 
-closeModal.addEventListener("click", () => (modal.style.display = "none"));
 window.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
