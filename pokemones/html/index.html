@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to PokeDex</title>
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/layout.css" />
+    <link rel="stylesheet" href="styles/components.css" />
+    <link rel="stylesheet" href="styles/pages.css" />
+  </head>
+
+  <body class="index-body">
+    <header>
+      <h1>Welcome to PokeDex Project</h1>
+    </header>
+
+    <nav>
+      <a href="index.html" class="active-nav">Home</a>
+      <a href="poke.html">All Pokémon</a>
+      <a href="generation.html?gen=1">Gen 1</a>
+      <a href="generation.html?gen=2">Gen 2</a>
+      <a href="generation.html?gen=3">Gen 3</a>
+      <a href="generation.html?gen=4">Gen 4</a>
+      <a href="generation.html?gen=5">Gen 5</a>
+      <a href="generation.html?gen=6">Gen 6</a>
+      <a href="generation.html?gen=7">Gen 7</a>
+      <a href="generation.html?gen=8">Gen 8</a>
+      <a href="generation.html?gen=9">Gen 9</a>
+    </nav>
+
+    <main class="info-page">
+      <h2>What is this project?</h2>
+      <p>
+        This is a fan-made **PokeDex** web application built using HTML, CSS
+        (with a focus on modularity), and pure JavaScript. The primary goal of
+        this project is to showcase data retrieval, filtering, sorting, and user
+        interface development using the public **PokeAPI**.
+      </p>
+
+      <h3>Key Features:</h3>
+      <ul>
+        <li>**Comprehensive Listing:** View all available Pokémon.</li>
+        <li>**Search & Filter:** Easily find Pokémon by name, ID, or Type.</li>
+        <li>
+          **Generational View:** Browse Pokémon specific to each generation. The
+          current generation is highlighted in the navigation bar.
+        </li>
+        <li>
+          **Detailed Information:** Click on any Pokémon card to view its stats,
+          abilities, moves, and even hear its cry!
+        </li>
+        <li>
+          **Infinite Scroll:** Efficiently loads more Pokémon on the main page.
+        </li>
+        <li>
+          **Responsive Design:** Optimized for both desktop and mobile devices.
+        </li>
+      </ul>
+
+      <p>
+        **Note:** All Pokémon data, images, and sounds are sourced from the
+        open-source <a href="https://pokeapi.co/" target="_blank">PokeAPI</a>.
+      </p>
+
+      <a href="poke.html" class="load-more-btn">Start Browsing Pokémon</a>
+    </main>
+
+    <footer class="main-footer">
+      <div class="footer-content">
+        <p>&copy; 2025 PokeDex Project | Unofficial Fan-Site</p>
+        <div class="contact-info">
+          <p>Developers: [Ваше Имя] & [Имя Соработника]</p>
+          <div class="social-links">
+            <a href="#" target="_blank">GitHub</a> |
+            <a href="#" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

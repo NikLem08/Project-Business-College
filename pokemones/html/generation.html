@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokémon Generation</title>
+    <link rel="stylesheet" href="styles/base.css" />
+    <link rel="stylesheet" href="styles/layout.css" />
+    <link rel="stylesheet" href="styles/components.css" />
+    <script src="js/generation.js" type="module" defer></script>
+  </head>
+
+  <body>
+    <header>
+      <h1 id="genTitle">Pokémon Generation</h1>
+      <div class="search-and-filters">
+        <div class="filters">
+          <select id="typeFilter">
+            <option value="">All Types</option>
+          </select>
+          <select id="sortFilter">
+            <option value="id-asc">ID ↑</option>
+            <option value="id-desc">ID ↓</option>
+            <option value="name-asc">Name A–Z</option>
+            <option value="name-desc">Name Z–A</option>
+          </select>
+        </div>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search Pokémon by name or ID..."
+        />
+      </div>
+    </header>
+
+    <nav id="mainNav">
+      <a href="index.html">Home</a>
+      <a href="poke.html">All Pokémon</a>
+      <a href="generation.html?gen=1" data-gen="1">Gen 1</a>
+      <a href="generation.html?gen=2" data-gen="2">Gen 2</a>
+      <a href="generation.html?gen=3" data-gen="3">Gen 3</a>
+      <a href="generation.html?gen=4" data-gen="4">Gen 4</a>
+      <a href="generation.html?gen=5" data-gen="5">Gen 5</a>
+      <a href="generation.html?gen=6" data-gen="6">Gen 6</a>
+      <a href="generation.html?gen=7" data-gen="7">Gen 7</a>
+      <a href="generation.html?gen=8" data-gen="8">Gen 8</a>
+      <a href="generation.html?gen=9" data-gen="9">Gen 9</a>
+    </nav>
+
+    <main id="pokemonList" class="pokemon-list"></main>
+
+    <p id="initialLoadingMessage" class="loading-message">
+      Loading Generation data, please wait...
+    </p>
+
+    <div id="pokemonModal" class="modal">
+      <div id="pokemonDetails" class="modal-content"></div>
+    </div>
+
+    <footer class="main-footer">
+      <div class="footer-content">
+        <p>&copy; 2025 PokeDex Project | Unofficial Fan-Site</p>
+        <div class="contact-info">
+          <p>Developers: [Ваше Имя] & [Имя Соработника]</p>
+          <div class="social-links">
+            <a href="#" target="_blank">GitHub</a> |
+            <a href="#" target="_blank">LinkedIn</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

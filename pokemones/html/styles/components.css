@@ -1,0 +1,302 @@
+/* Components Styles: Cards, Buttons, Forms, Modals, Loaders */
+
+/* Поиск и Фильтры */
+#searchInput {
+  padding: 10px 15px;
+  border: 2px solid #ffcb05;
+  border-radius: 20px;
+  font-size: 16px;
+  width: 250px;
+  max-width: 100%;
+  box-sizing: border-box;
+  background-color: #ffffff;
+  color: #333;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#searchInput:focus {
+  border-color: #2a75bb;
+  box-shadow: 0 0 8px rgba(42, 117, 187, 0.5);
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.filters select {
+  padding: 8px 15px;
+  border: 2px solid #ffcb05;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: #ffffff;
+  color: #333;
+  cursor: pointer;
+  appearance: none;
+  /* Custom Arrow */
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="%232a75bb" d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 30px;
+  transition: border-color 0.3s ease;
+  min-width: 100px;
+}
+
+.filters select:hover {
+  border-color: #2a75bb;
+}
+
+/* --- Карточка Покемона (Компактный размер) --- */
+.pokemon-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 15px;
+  padding: 10px; /* Уменьшаем отступ */
+  text-align: center;
+  width: 140px; /* Делаем карточку уже */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: fadeIn 0.5s ease-out;
+}
+
+.pokemon-card:hover {
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.pokemon-card img {
+  /* Уменьшаем размер изображения */
+  width: 70px;
+  height: 70px;
+  margin-bottom: 5px;
+}
+
+.pokemon-id {
+  font-size: 14px;
+  font-weight: 700;
+  color: #a0a0a0;
+  margin: 0;
+}
+
+.pokemon-card h3 {
+  margin: 5px 0 5px 0;
+  font-size: 16px; /* Чуть меньше заголовок */
+  color: #3d7dca;
+  text-transform: uppercase;
+  /* Обеспечиваем, что длинное имя не сломает карточку */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.types-container {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.pokemon-type {
+  display: inline-block;
+  padding: 3px 6px; /* Чуть меньше паддинг */
+  border-radius: 5px;
+  font-size: 10px; /* Чуть меньше шрифт */
+  font-weight: 600;
+  color: white;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* --- Модальное окно --- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: auto;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  animation: popIn 0.3s ease-out;
+  text-align: left;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.modal-header h2 {
+  color: #ef5350;
+  text-shadow: 1px 1px 0 #ffcb05;
+  margin: 0;
+  font-size: 1.8em;
+  display: flex;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.close-modal-btn {
+  color: #aaa;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  cursor: pointer;
+  z-index: 1001;
+  line-height: 1;
+}
+
+.cry-button {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  margin-left: 10px;
+  vertical-align: middle;
+  padding: 0;
+  line-height: 1;
+  color: #2a75bb;
+}
+
+#pokemonDetails .image-container {
+  padding: 10px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+#pokemonDetails .image-container img {
+  width: 120px;
+  height: 120px;
+}
+
+#pokemonDetails ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto 10px;
+  text-align: left;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+#pokemonDetails li {
+  background: #f9f9f9;
+  margin: 0;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* --- Кнопки --- */
+#toggleImageBtn {
+  background-color: #2a75bb;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+#toggleImageBtn:hover {
+  background-color: #3d7dca;
+}
+
+.load-more-btn {
+  display: block; /* Делает кнопку блочной для центрирования */
+  margin: 20px auto; /* Центрирует кнопку */
+  padding: 12px 25px;
+  background-color: #2a75bb;
+  color: white;
+  border: 3px solid #ffcb05; /* Рамочка */
+  border-radius: 25px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  outline: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.load-more-btn:hover {
+  background-color: #3d7dca;
+  transform: translateY(-2px);
+}
+
+.load-more-btn:disabled {
+  background-color: #ccc;
+  border-color: #aaa;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* --- Окно загрузки и ошибки --- */
+.loading-message {
+  font-size: 20px;
+  color: #2a75bb;
+  padding: 30px;
+  text-align: center;
+  font-weight: 600;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+
+.no-results {
+  font-size: 20px;
+  color: #ef5350;
+  padding: 50px;
+  width: 100%;
+  text-align: center;
+}

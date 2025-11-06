@@ -1,29 +1,16 @@
-// Haetaan osoiterivin parametrit
-const urlParams = new URLSearchParams(window.location.search);
-const genNumber = urlParams.get("gen"); // Ottaa parametrin "gen" arvon
+import { fetchPokemonDetails } from "./api.js";
 
-const genTitle = document.getElementById("genTitle");
-const pokemonList = document.getElementById("pokemonList");
+// Get common elements
 const modal = document.getElementById("pokemonModal");
 const modalContent = document.getElementById("pokemonDetails");
-
 const typeFilter = document.getElementById("typeFilter");
-const sortFilter = document.getElementById("sortFilter");
 
-let allPokemons = [];
-
-genTitle.textContent = `Pokémon Generation ${genNumber}`; // Näyttää sukupolven numeron otsikossa
-
-// // Funktio, joka hakee pokemonien tyypit
-async function fetchTypes() {
-  const res = await fetch("https://pokeapi.co/api/v2/type"); // Tehdään API-pyyntö
-  const data = await res.json();
-
-  const types = data.results
-    .map((type) => type.name)
-    .filter((name) => name !== "unknown" && name !== "shadow"); // Poistetaan tuntemattomat tyypit
-
-  // Lisätään jokainen pokemonien tyyppi pudotusvalikkoon
+/**
+ * Populates the type filter dropdown with Pokémon types.
+ * @param {Array<string>} types - An array of type names.
+ */
+function populateTypeFilter(types) {
+  typeFilter.innerHTML = '<option value="">All Types</option>';
   types.forEach((type) => {
     const option = document.createElement("option");
     option.value = type;
@@ -32,91 +19,20 @@ async function fetchTypes() {
   });
 }
 
-// Funktio, joka hakee kaikki pokemonit tietyssä sukupolvessa
-async function fetchGeneration(gen) {
-  const res = await fetch(`https://pokeapi.co/api/v2/generation/${gen}`);
-  const data = await res.json();
-
-  // Luo lista "promisesta", jotka hakevat jokaisen Pokemonin tiedot
-  const fetchPromises = data.pokemon_species.map(async (p) => {
-    try {
-      const pokeRes = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${p.name}`
-      );
-
-      if (!pokeRes.ok) {
-        return null; // Jos haku epäonnistuu, ohitetaan
-      }
-
-      return pokeRes.json();
-    } catch (e) {
-      return null; // Jos tulee virhe, ohitetaan
-    }
-  });
-
-  // Odotetaan, kunnes kaikki haut valmistuvat
-  allPokemons = (await Promise.all(fetchPromises)).filter(
-    (pokemon) => pokemon && pokemon.id
-  );
-
-  allPokemons.sort((a, b) => a.id - b.id);
-
-  await fetchTypes(); // Haetaan tarvittavat tyypit
-  applyFiltersAndSort(); // Näytetään lista käyttäjälle
-}
-
-// Suodattaa ja lajittelee Pokemonit niiden tyyppeihin
-function applyFiltersAndSort() {
-  let currentPokemons = [...allPokemons];
-  const selectedType = typeFilter.value;
-
-  // Suodatus jokaisen tyypin mukaan
-  if (selectedType) {
-    currentPokemons = currentPokemons.filter((pokemon) =>
-      pokemon.types.some((t) => t.type.name === selectedType)
-    );
-  }
-
-  const sortValue = sortFilter.value; // Otetaan valittu laajittelutapa
-
-  switch (sortValue) {
-    case "id-asc":
-      currentPokemons.sort((a, b) => a.id - b.id);
-      break;
-    case "id-desc":
-      currentPokemons.sort((a, b) => b.id - a.id);
-      break;
-    case "name-asc":
-      currentPokemons.sort((a, b) => a.name.localeCompare(b.name));
-      break;
-    case "name-desc":
-      currentPokemons.sort((a, b) => b.name.localeCompare(a.name));
-      break;
-  }
-
-  renderPokemonList(currentPokemons);
-}
-
-// Funktio, joka luo ja näyttää Pokemon-listan sivulla käyttjälle
-function renderPokemonList(pokemons) {
-  pokemonList.innerHTML = "";
-  if (pokemons.length === 0) {
-    pokemonList.innerHTML =
-      '<p class="no-results">No Pokémon found in this generation.</p>';
-    return;
-  }
-  pokemons.forEach(renderPokemon);
-}
-
-// Funktio, joka luo yhden Pokemonin kortin
-function renderPokemon(pokemon) {
+/**
+ * Creates and appends a single Pokémon card to the list.
+ * @param {Object} pokemon - The Pokémon data object.
+ * @param {HTMLElement} listElement - The DOM element to append the card to.
+ */
+function renderPokemonCard(pokemon, listElement) {
   const card = document.createElement("div");
   card.classList.add("pokemon-card");
+
   card.innerHTML = `
     <img src="${
       pokemon.sprites.other["official-artwork"].front_default
     }" alt="${pokemon.name}">
-    <p class="pokemon-id">#${pokemon.id}</p>
+    <p class="pokemon-id">#${String(pokemon.id).padStart(3, "0")}</p>
     <h3>${pokemon.name.toUpperCase()}</h3>
     <div class="types-container">
         ${pokemon.types
@@ -129,20 +45,36 @@ function renderPokemon(pokemon) {
           .join("")}
     </div>
   `;
-  // Kun käyttäjä klikkaa kortin, näytetään pokempnin yksityiskohdat
+
+  // Attach click listener to show details
   card.addEventListener("click", () => showPokemonDetails(pokemon.id));
-  pokemonList.appendChild(card);
+  listElement.appendChild(card);
 }
 
-// Päivittetään listan kun valitaan suodatin tai lajittelu
-typeFilter.addEventListener("change", applyFiltersAndSort);
-sortFilter.addEventListener("change", applyFiltersAndSort);
+/**
+ * Renders a list of Pokémon to the specified list container.
+ * @param {Array<Object>} pokemons - The array of Pokémon data.
+ * @param {HTMLElement} listElement - The DOM element to render the list in.
+ */
+function renderPokemonList(pokemons, listElement) {
+  listElement.innerHTML = "";
+  if (pokemons.length === 0) {
+    listElement.innerHTML =
+      '<p class="no-results">No Pokémon found matching your criteria.</p>';
+    return;
+  }
+  pokemons.forEach((pokemon) => renderPokemonCard(pokemon, listElement));
+}
 
-// Näyttää yksittäisen Pokémonin tiedot ponnahdusikkunassa (modalissa)
+/**
+ * Shows the detailed modal for a specific Pokémon.
+ * @param {number} id - The ID of the Pokémon.
+ */
 async function showPokemonDetails(id) {
-  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-  const data = await res.json();
+  const data = await fetchPokemonDetails(id);
+  if (!data) return;
 
+  // Stat Icons
   const statIcons = {
     hp: "❤️",
     attack: "⚔️",
@@ -152,14 +84,13 @@ async function showPokemonDetails(id) {
     speed: "⚡",
   };
 
-  // Normaalin ja shiny-version kuvat
   const images = {
     normal: data.sprites.other["official-artwork"]?.front_default,
     shiny: data.sprites.front_shiny,
   };
+  let current = "normal";
 
-  let current = "normal"; // Tässä seurataan kumpi kuva näkyy
-
+  // Abilities List
   const abilitiesList = data.abilities
     .map(
       (a) =>
@@ -169,13 +100,13 @@ async function showPokemonDetails(id) {
     )
     .join("");
 
-  // Pokemonin äänen URL
+  // Cry Button
   const cryUrl = data.cries.latest || data.cries.legacy;
   const cryButton = cryUrl
     ? `<button id="playCryBtn" class="cry-button">🔊</button>`
     : "";
 
-  // Modal-ikkunan sisältö
+  // Modal Content HTML
   modalContent.innerHTML = `
     <div class="modal-header">
         <h2>${data.name.toUpperCase()} (#${data.id})${cryButton}</h2>
@@ -231,15 +162,15 @@ async function showPokemonDetails(id) {
     </div>
   `;
 
-  modal.style.display = "flex"; // Näyttää modaalin
+  modal.style.display = "flex";
 
-  // Tässä on napit ja kuvat modaalissa
+  // Modal Event Listeners (moved to UI for cleanup)
   const toggleBtn = document.getElementById("toggleImageBtn");
   const imageEl = document.getElementById("pokemonImage");
   const playCryBtn = document.getElementById("playCryBtn");
   const closeModalBtn = document.getElementById("closeModal");
 
-  // Vaihtaa normaalin kuvan ja shiny-kuvan välillä
+  // Image Toggle
   toggleBtn.addEventListener("click", () => {
     if (current === "normal") {
       imageEl.src = images.shiny || images.normal;
@@ -252,7 +183,7 @@ async function showPokemonDetails(id) {
     }
   });
 
-  // Ääntää valitun pokemonin äänen
+  // Play Cry
   if (playCryBtn && cryUrl) {
     playCryBtn.addEventListener("click", () => {
       const audio = new Audio(cryUrl);
@@ -260,15 +191,20 @@ async function showPokemonDetails(id) {
     });
   }
 
+  // Close Modal
   closeModalBtn.addEventListener("click", () => {
     modal.style.display = "none";
   });
 }
 
+// Close modal when clicking outside
 window.addEventListener("click", (e) => {
   if (e.target === modal) modal.style.display = "none";
 });
 
-if (genNumber) {
-  fetchGeneration(genNumber);
-}
+export {
+  populateTypeFilter,
+  renderPokemonList,
+  renderPokemonCard,
+  showPokemonDetails,
+};

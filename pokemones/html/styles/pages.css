@@ -1,0 +1,24 @@
+/* Pages Styles: Specific styles for the informational index page */
+
+/* Стили для Инфо-страницы (index.html) */
+.info-page {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-page ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+/* Переопределение кнопки, чтобы она не была блочной ссылкой на инфо-странице */
+.info-page a.load-more-btn {
+  display: inline-block;
+  margin-top: 20px;
+  text-decoration: none;
+  text-align: center;
+}

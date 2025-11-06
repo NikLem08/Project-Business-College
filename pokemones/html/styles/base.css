@@ -1,0 +1,163 @@
+/* Base Styles: Resets, Typography, General Colors, Pokemon Type Colors, Animations */
+
+/* Общие сбросы и типографика */
+body {
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+  background-color: #f8f9fb;
+  color: #333;
+}
+
+h1,
+h2,
+h3 {
+  color: #3d7dca;
+}
+
+/* --- Цвета для типов Покемонов --- */
+.type-normal {
+  background-color: #a8a878;
+}
+.type-fire {
+  background-color: #f08030;
+}
+.type-water {
+  background-color: #6890f0;
+}
+.type-grass {
+  background-color: #78c850;
+}
+.type-electric {
+  background-color: #f8d030;
+}
+.type-ice {
+  background-color: #98d8d8;
+}
+.type-fighting {
+  background-color: #c03028;
+}
+.type-poison {
+  background-color: #a040a0;
+}
+.type-ground {
+  background-color: #e0c068;
+}
+.type-flying {
+  background-color: #a890f0;
+}
+.type-psychic {
+  background-color: #f85888;
+}
+.type-bug {
+  background-color: #a8b820;
+}
+.type-rock {
+  background-color: #b8a038;
+}
+.type-ghost {
+  background-color: #705898;
+}
+.type-dragon {
+  background-color: #7038f8;
+}
+.type-steel {
+  background-color: #b8b8d0;
+}
+.type-dark {
+  background-color: #705848;
+}
+.type-fairy {
+  background-color: #ee99ac;
+}
+
+/* Базовые стили иконок типов (Пути скорректированы) */
+.type-icon {
+  width: 32px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  text-indent: -9999px;
+  vertical-align: middle;
+  padding: 0;
+  margin: 0 2px;
+  border: none;
+  display: inline-block;
+  box-shadow: none;
+}
+
+.type-icon.normal {
+  background-image: url("assets/types/normal.svg");
+}
+.type-icon.fire {
+  background-image: url("assets/types/fire.svg");
+}
+.type-icon.water {
+  background-image: url("assets/types/water.svg");
+}
+.type-icon.grass {
+  background-image: url("assets/types/grass.svg");
+}
+.type-icon.electric {
+  background-image: url("assets/types/electric.svg");
+}
+.type-icon.ice {
+  background-image: url("assets/types/ice.svg");
+}
+.type-icon.fighting {
+  background-image: url("assets/types/fighting.svg");
+}
+.type-icon.poison {
+  background-image: url("assets/types/poison.svg");
+}
+.type-icon.ground {
+  background-image: url("assets/types/ground.svg");
+}
+.type-icon.flying {
+  background-image: url("assets/types/flying.svg");
+}
+.type-icon.psychic {
+  background-image: url("assets/types/psychic.svg");
+}
+.type-icon.bug {
+  background-image: url("assets/types/bug.svg");
+}
+.type-icon.rock {
+  background-image: url("assets/types/rock.svg");
+}
+.type-icon.ghost {
+  background-image: url("assets/types/ghost.svg");
+}
+.type-icon.dragon {
+  background-image: url("assets/types/dragon.svg");
+}
+.type-icon.steel {
+  background-image: url("assets/types/steel.svg");
+}
+.type-icon.dark {
+  background-image: url("assets/types/dark.svg");
+}
+.type-icon.fairy {
+  background-image: url("assets/types/fairy.svg");
+}
+
+/* Анимации */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

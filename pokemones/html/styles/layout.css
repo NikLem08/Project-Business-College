@@ -1,0 +1,149 @@
+/* Layout Styles: Header, Navigation, Footer, Grids, Responsive Structures */
+
+/* Header */
+header {
+  background-color: #ef5350;
+  color: white;
+  padding: 15px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: 1px;
+  color: white;
+}
+
+.search-and-filters {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* Navigation */
+nav {
+  background-color: #ffcb05;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+nav a {
+  color: #2a75bb;
+  text-decoration: none;
+  margin: 0 10px;
+  padding: 5px 8px;
+  font-weight: 600;
+  transition: color 0.2s ease, background-color 0.2s ease,
+    border-radius 0.2s ease;
+}
+
+nav a:hover {
+  color: #ef5350;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5px;
+}
+
+/* Активная ссылка (для всех страниц и для генерации) */
+nav a.active-gen,
+nav a.active-nav {
+  color: white;
+  background-color: #ef5350; /* Красный фон */
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+nav a.active-gen:hover {
+  color: white;
+  background-color: #d64846;
+}
+
+/* Основной контент (Сетка покемонов) */
+.pokemon-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Футер */
+.main-footer {
+  background-color: #333;
+  color: #ccc;
+  padding: 20px 25px;
+  margin-top: 40px;
+  font-size: 14px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.contact-info {
+  text-align: right;
+}
+
+.social-links a {
+  color: #ffcb05;
+  text-decoration: none;
+  margin-left: 10px;
+  transition: color 0.2s;
+}
+
+.social-links a:hover {
+  color: #ef5350;
+}
+
+/* --- Медиа-запросы (Адаптивность) --- */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+  header h1 {
+    margin-bottom: 10px;
+  }
+  #searchInput,
+  .search-and-filters {
+    width: 100%;
+    align-items: center;
+  }
+  .filters {
+    justify-content: center;
+    width: 100%;
+  }
+
+  nav a {
+    margin: 5px 5px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .contact-info {
+    text-align: center;
+  }
+
+  .social-links {
+    margin-top: 5px;
+  }
+}
