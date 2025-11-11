@@ -23,10 +23,10 @@ let allPokemons = [];
 function highlightActiveGeneration() {
   if (!genNumber) return;
 
-  // Удаляем класс активной генерации со всех ссылок
+
   mainNav.querySelectorAll("a").forEach((link) => {
     link.classList.remove("active-gen");
-    // Убедимся, что All Pokemon тоже не активен
+
     if (link.getAttribute("href") === "poke.html") {
       link.classList.remove("active-nav");
     }
@@ -35,7 +35,6 @@ function highlightActiveGeneration() {
     }
   });
 
-  // Добавляем класс активной генерации к нужной ссылке
   const activeLink = mainNav.querySelector(`a[data-gen="${genNumber}"]`);
   if (activeLink) {
     activeLink.classList.add("active-gen");
@@ -56,7 +55,7 @@ function applyFiltersAndSort() {
     currentPokemons = currentPokemons.filter((pokemon) => {
       const nameMatch = pokemon.name.toLowerCase().includes(searchTerm);
       const idMatch = String(pokemon.id).startsWith(searchTerm);
-      return pokemon && (nameMatch || idMatch); // Проверка на null/undefined
+      return pokemon && (nameMatch || idMatch); 
     });
   }
 

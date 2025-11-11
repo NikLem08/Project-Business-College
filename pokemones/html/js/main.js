@@ -29,7 +29,7 @@ function applySearchAndRender() {
     currentPokemons = currentPokemons.filter((pokemon) => {
       const nameMatch = pokemon.name.toLowerCase().includes(searchTerm);
       const idMatch = String(pokemon.id).startsWith(searchTerm);
-      return pokemon && (nameMatch || idMatch); // Проверка на null/undefined
+      return pokemon && (nameMatch || idMatch);
     });
   }
 
@@ -70,7 +70,6 @@ function applySearchAndRender() {
     pokemonList.innerHTML =
       '<p class="no-results">No Pokémon found matching your criteria.</p>';
   } else if (pokemonsToRender.length === 0 && allPokemons.length === 0) {
-    // Не показываем ошибку фильтрации, если вообще нет данных
   } else {
     pokemonsToRender.forEach((pokemon) =>
       renderPokemonCard(pokemon, pokemonList)

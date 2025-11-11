@@ -53,11 +53,11 @@ nav a:hover {
   border-radius: 5px;
 }
 
-/* Активная ссылка (для всех страниц и для генерации) */
+/* Active link (for all pages and generations) */
 nav a.active-gen,
 nav a.active-nav {
   color: white;
-  background-color: #ef5350; /* Красный фон */
+  background-color: #ef5350;
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
@@ -67,7 +67,7 @@ nav a.active-gen:hover {
   background-color: #d64846;
 }
 
-/* Основной контент (Сетка покемонов) */
+/* Main content (Pokemon Grid) */
 .pokemon-list {
   display: flex;
   flex-wrap: wrap;
@@ -76,7 +76,7 @@ nav a.active-gen:hover {
   padding: 20px;
 }
 
-/* Футер */
+/* Footer */
 .main-footer {
   background-color: #333;
   color: #ccc;
@@ -110,7 +110,7 @@ nav a.active-gen:hover {
   color: #ef5350;
 }
 
-/* --- Медиа-запросы (Адаптивность) --- */
+/* --- Media queries (Adaptability) --- */
 @media (max-width: 768px) {
   header {
     flex-direction: column;

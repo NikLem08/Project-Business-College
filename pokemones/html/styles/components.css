@@ -1,6 +1,6 @@
 /* Components Styles: Cards, Buttons, Forms, Modals, Loaders */
 
-/* Поиск и Фильтры */
+/* Search bar and filters */
 #searchInput {
   padding: 10px 15px;
   border: 2px solid #ffcb05;
@@ -49,14 +49,14 @@
   border-color: #2a75bb;
 }
 
-/* --- Карточка Покемона (Компактный размер) --- */
+/* --- Pokemon Card (Compact size) --- */
 .pokemon-card {
   background-color: white;
   border: 1px solid #ddd;
   border-radius: 15px;
-  padding: 10px; /* Уменьшаем отступ */
+  padding: 10px;
   text-align: center;
-  width: 140px; /* Делаем карточку уже */
+  width: 140px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -69,7 +69,6 @@
 }
 
 .pokemon-card img {
-  /* Уменьшаем размер изображения */
   width: 70px;
   height: 70px;
   margin-bottom: 5px;
@@ -84,10 +83,9 @@
 
 .pokemon-card h3 {
   margin: 5px 0 5px 0;
-  font-size: 16px; /* Чуть меньше заголовок */
+  font-size: 16px;
   color: #3d7dca;
   text-transform: uppercase;
-  /* Обеспечиваем, что длинное имя не сломает карточку */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -102,9 +100,9 @@
 
 .pokemon-type {
   display: inline-block;
-  padding: 3px 6px; /* Чуть меньше паддинг */
+  padding: 3px 6px;
   border-radius: 5px;
-  font-size: 10px; /* Чуть меньше шрифт */
+  font-size: 10px;
   font-weight: 600;
   color: white;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
@@ -112,7 +110,7 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* --- Модальное окно --- */
+/* --- Modal window --- */
 .modal {
   display: none;
   position: fixed;
@@ -225,7 +223,7 @@
   justify-content: space-between;
 }
 
-/* --- Кнопки --- */
+/* --- Buttons --- */
 #toggleImageBtn {
   background-color: #2a75bb;
   color: white;
@@ -243,12 +241,12 @@
 }
 
 .load-more-btn {
-  display: block; /* Делает кнопку блочной для центрирования */
-  margin: 20px auto; /* Центрирует кнопку */
+  display: block;
+  margin: 20px auto;
   padding: 12px 25px;
   background-color: #2a75bb;
   color: white;
-  border: 3px solid #ffcb05; /* Рамочка */
+  border: 3px solid #ffcb05;
   border-radius: 25px;
   font-size: 18px;
   font-weight: 700;
@@ -271,7 +269,7 @@
   box-shadow: none;
 }
 
-/* --- Окно загрузки и ошибки --- */
+/* --- Loading and Error window --- */
 .loading-message {
   font-size: 20px;
   color: #2a75bb;

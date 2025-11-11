@@ -1,6 +1,6 @@
 /* Base Styles: Resets, Typography, General Colors, Pokemon Type Colors, Animations */
 
-/* Общие сбросы и типографика */
+/* General resets and typography */
 body {
   margin: 0;
   font-family: "Poppins", sans-serif;
@@ -14,7 +14,7 @@ h3 {
   color: #3d7dca;
 }
 
-/* --- Цвета для типов Покемонов --- */
+/* --- Colors for all Pokemon types --- */
 .type-normal {
   background-color: #a8a878;
 }
@@ -70,7 +70,7 @@ h3 {
   background-color: #ee99ac;
 }
 
-/* Базовые стили иконок типов (Пути скорректированы) */
+/* Basic type icon styles */
 .type-icon {
   width: 32px;
   height: 16px;
@@ -141,7 +141,7 @@ h3 {
   background-image: url("assets/types/fairy.svg");
 }
 
-/* Анимации */
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;

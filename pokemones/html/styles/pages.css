@@ -1,6 +1,6 @@
 /* Pages Styles: Specific styles for the informational index page */
 
-/* Стили для Инфо-страницы (index.html) */
+/* Styles for Info-page (index.html) */
 .info-page {
   max-width: 800px;
   margin: 20px auto;
@@ -15,7 +15,7 @@
   padding-left: 20px;
 }
 
-/* Переопределение кнопки, чтобы она не была блочной ссылкой на инфо-странице */
+/* Redefining the button so it is not a block link on the info page */
 .info-page a.load-more-btn {
   display: inline-block;
   margin-top: 20px;

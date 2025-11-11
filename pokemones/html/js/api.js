@@ -91,7 +91,6 @@ async function fetchAllPokemonList() {
     return validPokemons;
   } catch (error) {
     console.error("Error fetching all Pokémon list:", error);
-    // Пробрасываем ошибку для обработки в main.js (скрыть загрузчик, показать ошибку)
     throw new Error("Failed to load comprehensive Pokémon list from API.");
   }
 }
