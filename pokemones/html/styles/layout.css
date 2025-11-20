@@ -1,5 +1,3 @@
-/* Layout Styles: Header, Navigation, Footer, Grids, Responsive Structures */
-
 /* Header */
 header {
   background-color: #ef5350;
@@ -53,7 +51,6 @@ nav a:hover {
   border-radius: 5px;
 }
 
-/* Active link (for all pages and generations) */
 nav a.active-gen,
 nav a.active-nav {
   color: white;
@@ -67,7 +64,6 @@ nav a.active-gen:hover {
   background-color: #d64846;
 }
 
-/* Main content (Pokemon Grid) */
 .pokemon-list {
   display: flex;
   flex-wrap: wrap;
@@ -110,7 +106,48 @@ nav a.active-gen:hover {
   color: #ef5350;
 }
 
-/* --- Media queries (Adaptability) --- */
+/* Mobile devices (e.g., up to 480px) */
+@media (max-width: 480px) {
+  header {
+    padding: 10px 15px;
+  }
+  header h1 {
+    font-size: 22px;
+  }
+
+  .search-and-filters {
+    width: 100%;
+    align-items: center;
+  }
+  .filters {
+    justify-content: center;
+    gap: 8px;
+  }
+
+  nav a {
+    margin: 3px 5px;
+    padding: 5px 6px;
+    font-size: 14px;
+  }
+
+  .pokemon-list {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+  .contact-info {
+    text-align: center;
+  }
+  .social-links {
+    margin-top: 5px;
+  }
+}
+
 @media (max-width: 768px) {
   header {
     flex-direction: column;
@@ -119,7 +156,6 @@ nav a.active-gen:hover {
   header h1 {
     margin-bottom: 10px;
   }
-  #searchInput,
   .search-and-filters {
     width: 100%;
     align-items: center;
@@ -138,12 +174,7 @@ nav a.active-gen:hover {
     text-align: center;
     gap: 10px;
   }
-
   .contact-info {
     text-align: center;
-  }
-
-  .social-links {
-    margin-top: 5px;
   }
 }
